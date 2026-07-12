@@ -1,3 +1,8 @@
+data "azurerm_key_vault_secret" "repository_token" {
+  for_each     = { for k, v in var.static_web_apps : k => v if v.repository_token_key_vault_id != null && v.repository_token_key_vault_secret_name != null }
+  name         = each.value.repository_token_key_vault_secret_name
+  key_vault_id = each.value.repository_token_key_vault_id
+}
 resource "azurerm_static_web_app" "static_web_apps" {
   for_each = var.static_web_apps
 
@@ -9,7 +14,7 @@ resource "azurerm_static_web_app" "static_web_apps" {
   preview_environments_enabled       = each.value.preview_environments_enabled
   public_network_access_enabled      = each.value.public_network_access_enabled
   repository_branch                  = each.value.repository_branch
-  repository_token                   = each.value.repository_token
+  repository_token                   = each.value.repository_token != null ? each.value.repository_token : try(data.azurerm_key_vault_secret.repository_token[each.key].value, null)
   repository_url                     = each.value.repository_url
   sku_size                           = each.value.sku_size
   sku_tier                           = each.value.sku_tier
