@@ -1,3 +1,7 @@
+output "static_web_apps_id" {
+  description = "Map of id values across all static_web_apps, keyed the same as var.static_web_apps"
+  value       = { for k, v in azurerm_static_web_app.static_web_apps : k => v.id }
+}
 output "static_web_apps_api_key" {
   description = "Map of api_key values across all static_web_apps, keyed the same as var.static_web_apps"
   value       = { for k, v in azurerm_static_web_app.static_web_apps : k => v.api_key }
