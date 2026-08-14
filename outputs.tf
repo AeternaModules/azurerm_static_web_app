@@ -13,7 +13,7 @@ output "static_web_apps_app_settings" {
 }
 output "static_web_apps_basic_auth" {
   description = "Map of basic_auth values across all static_web_apps, keyed the same as var.static_web_apps"
-  value       = { for k, v in azurerm_static_web_app.static_web_apps : k => v.basic_auth if v.basic_auth != null && length(v.basic_auth) > 0 }
+  value       = { for k, v in azurerm_static_web_app.static_web_apps : k => one(v.basic_auth) if v.basic_auth != null && length(v.basic_auth) > 0 }
   sensitive   = true
 }
 output "static_web_apps_configuration_file_changes_enabled" {
@@ -26,7 +26,7 @@ output "static_web_apps_default_host_name" {
 }
 output "static_web_apps_identity" {
   description = "Map of identity values across all static_web_apps, keyed the same as var.static_web_apps"
-  value       = { for k, v in azurerm_static_web_app.static_web_apps : k => v.identity if v.identity != null && length(v.identity) > 0 }
+  value       = { for k, v in azurerm_static_web_app.static_web_apps : k => one(v.identity) if v.identity != null && length(v.identity) > 0 }
 }
 output "static_web_apps_location" {
   description = "Map of location values across all static_web_apps, keyed the same as var.static_web_apps"
